@@ -1,0 +1,65 @@
+	4.Write a C program to check whether a given string belongs to the language defined by a Context Free Grammar (CFG)
+S → 0S0 | 1S1 | 0 | 1 | ε
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+
+bool S(char *input, int *index);
+
+bool match(char *input, int *index, char symbol) {
+    if (input[*index] == symbol) {
+        (*index)++;
+        return true;
+    }
+    return false;
+}
+
+bool S(char *input, int *index) {
+    int originalIndex = *index;
+
+    if (match(input, index, '0') && S(input, index) && match(input, index, '0')) {
+        return true;
+    }
+
+    *index = originalIndex;
+
+    if (match(input, index, '1') && S(input, index) && match(input, index, '1')) {
+        return true;
+    }
+
+    *index = originalIndex;
+
+    if (match(input, index, '0')) {
+        return true;
+    }
+
+    *index = originalIndex;
+
+    if (match(input, index, '1')) {
+        return true;
+    }
+
+    *index = originalIndex;
+
+    return true;  
+}
+
+bool belongsToLanguage(char *input) {
+    int index = 0;
+    return S(input, &index) && input[index] == '\0';
+}
+
+int main() {
+    char input[100];
+    printf("Enter a string: ");
+    scanf("%s", input);
+
+    if (belongsToLanguage(input)) {
+        printf("String belongs to the language.\n");
+    } else {
+        printf("String does not belong to the language.\n");
+    }
+
+    return 0;
+}
