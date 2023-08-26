@@ -1,0 +1,44 @@
+#include <stdio.h>0
+#include <stdbool.h>
+#include <string.h>
+
+bool S(char *input, int *index);
+
+bool match(char *input, int *index, char symbol) {
+    if (input[*index] == symbol) {
+        (*index)++;
+        return true;
+    }
+    return false;
+}
+
+bool S(char *input, int *index) {
+    int originalIndex = *index;
+
+    if (match(input, index, '0') && S(input, index) && match(input, index, '1')) {
+        return true;
+    }
+
+    *index = originalIndex;
+
+    return true;  
+}
+
+bool belongsToLanguage(char *input) {
+    int index = 0;
+    return S(input, &index) && input[index] == '\0';
+}
+
+int main() {
+    char input[100];
+    printf("Enter a string: ");
+    scanf("%s", input);
+
+    if (belongsToLanguage(input)) {
+        printf("String '%s' belongs to the language.\n", input);
+    } else {
+        printf("String '%s' does not belong to the language.\n", input);
+    }
+
+    return 0;
+}
